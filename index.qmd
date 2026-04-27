@@ -2,8 +2,8 @@
 title: "Mvuselelo Mathunjwa"
 toc: false
 about:
-  image: mvusmath-gif.github.io/lelo.jpg
   template: jolla
+  image: lelo.jpeg
   image-shape: round
   image-width: 17em
   links:
@@ -15,4 +15,4 @@ about:
       href: mailto:mathun1@stolaf.edu
 ---
 
-Hello, it's me. Hello it's me. Hello, it's ME. As you can tell from my introduction, I like Cardi B songs just a bit. My name is Lelo and I am from Eswatini. In my free time, I like to read historical romance manga, watch many different genres of anime (except for the weird ones), and watch other kinds of shows like "The Boys" or "Invincible". I love anything that is pink, green or yellow and I aspire to live in a brown and green house with my brown labrador and my brown cat and my brown horses and my brown cows and brown brown wooden floor.
+Welcome to my site. HEHEHEHE. Now you're trapped forever. You are in my dominion now, and will have to live by my word.

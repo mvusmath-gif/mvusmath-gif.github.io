@@ -1,0 +1,134 @@
+---
+title: "Beautiful Maps"
+format: html
+---
+
+```{r, echo=FALSE}
+#| message: false
+#| warning: false
+#| results: 'hide' # hide the output of the code
+
+# Initial packages required (we'll be adding more)
+library(tidyverse)
+library(mdsr)      # package associated with our MDSR book
+library(tidyverse)
+library(sf)
+library(leaflet)
+library(viridis)
+library(stringr)
+```
+
+```{r, echo=FALSE}
+#| results: 'hide' # hide the output of the code
+#| warning: false  # hide warnings
+#| message: false  # hide messages
+covid <- read_csv(
+  "https://raw.githubusercontent.com/Dhamu785/COVID19-Data-visualization-/main/datasets/United%20States%20of%20America/us-states%20COVID19%20raw%20data%20till_25-Dec-2021.csv"
+)
+```
+
+```{r, echo=FALSE}
+#| results: 'hide' # hide the output of the code
+#| warning: false  # hide warnings
+#| message: false  # hide messages
+covid_latest <- covid |>
+  group_by(state) |>
+  summarise(
+    cases = max(cases, na.rm = TRUE),
+    deaths = max(deaths, na.rm = TRUE)
+  )
+```
+
+```{r, echo=FALSE}
+#| warning: false  # hide warnings
+#| message: false  # hide messages
+#| results: 'hide' # hide the output of the code
+library(sf) 
+states <- read_sf("https://rstudio.github.io/leaflet/json/us-states.geojson")  #<2>
+class(states) 
+states
+```
+
+```{r, echo=FALSE}
+#| results: 'hide' # hide the output of the code
+#| warning: false  # hide warnings
+#| message: false  # hide messages
+map_data <- states |>
+  left_join(covid_latest, by = c("name" = "state")) |>
+  filter(!name %in% c("Alaska", "Hawaii", "Puerto Rico"))
+```
+
+# Numerical Analysis 
+
+```{r, echo=FALSE}
+ggplot(data = map_data) +
+  geom_sf(aes(fill = cases), color = "white", linewidth = 0.2) +
+  coord_sf() +
+  theme_void() +
+  labs(
+    fill = "Covid Cases",
+    title = "COVID-19 Cases by State (Static Map)") +
+  scale_fill_viridis()
+```
+
+
+```{r, echo=FALSE}
+pal_cases <- colorNumeric("Reds", domain = map_data$cases)
+
+leaflet(map_data) |>
+  addTiles() |>
+  addPolygons(
+    fillColor = ~pal_cases(cases),
+    weight = 1,
+    color = "white",
+    fillOpacity = 0.7,
+    label = ~paste0(name, ": ", cases, " cases")
+  ) |>
+  addLegend(
+    pal = pal_cases,
+    values = ~cases,
+    title = "Cases",
+    position = "bottomright"
+  )
+```
+
+The numeric map shows clear variation in COVID-19 impact across US states. States with the highest case counts are generally those with larger populations, including California, Texas, and Florida. This suggests that population size and mobility patterns likely played a major role in the spread of the virus. Overall, the distribution is uneven, with a small number of states accounting for a large share of total cases.
+
+# Categorical Analaysis
+
+```{r, echo=FALSE}
+#| warning: false  # hide warnings
+#| message: false  # hide messages
+#| results: 'hide' # hide the output of the code
+map_data_2 <- map_data |>
+  mutate(covid_risk = case_when(
+    cases > 5000000 ~ "Very High",
+    cases > 3000000 ~ "High",
+    cases > 1000000 ~ "Medium",
+    TRUE ~ "Low"
+  ))
+```
+
+```{r, echo=FALSE}
+ggplot(data = map_data_2) +
+  geom_sf(aes(fill = covid_risk), color = "white") +
+  theme_void() +
+  scale_fill_brewer(palette = "Reds") +
+  labs(fill = "Risk Level")
+```
+
+```{r, echo=FALSE}
+pal_risk <- colorFactor("Reds", domain = map_data_2$covid_risk)
+
+leaflet(map_data_2) |>
+  addTiles() |>
+  addPolygons(
+    fillColor = ~pal_risk(covid_risk),
+    color = "white",
+    weight = 1,
+    fillOpacity = 0.7,
+    label = ~paste(name, covid_risk)
+  )
+```
+
+The categorical map groups states into risk categories based on total case counts. This classification highlights regional differences in COVID-19 impact, with higher-risk states appearing more frequently in the South and West. Lower-risk states are more dispersed but tend to include smaller population states.

@@ -1,9 +1,5 @@
 ---
-title: "About"
+title: "About Me"
 ---
 
-About this site
-
-```{r}
-1 + 1
-```
+Hello, it's me. Hello it's me. Hello, it's ME. As you can tell from my introduction, I like Cardi B songs just a bit. My name is Lelo and I am from Eswatini. In my free time, I like to read historical romance manga, watch many different genres of anime (except for the weird ones), and watch other kinds of shows like "The Boys" or "Invincible". I love anything that is pink, green or yellow and I aspire to live in a brown and green house with my brown labrador and my brown cat and my brown horses and my brown cows and brown brown wooden floor.

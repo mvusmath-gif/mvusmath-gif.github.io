@@ -3,12 +3,15 @@ project:
   output-dir: docs
 
 website:
-  title: "mvusmath-gif.github.io"
+  title: "Laylow"
   navbar:
     left:
       - href: index.qmd
         text: Home
+      - analysis.qmd
+      - maps.qmd
       - about.qmd
+      - resources.qmd
 
 format:
   html:
